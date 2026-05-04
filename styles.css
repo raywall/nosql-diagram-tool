@@ -128,9 +128,20 @@ h2 {
 }
 
 .workspace {
+  --editor-col: minmax(320px, 33vw);
+  --inspector-col: minmax(300px, 24vw);
   display: grid;
-  grid-template-columns: minmax(320px, 33vw) minmax(420px, 1fr) minmax(300px, 24vw);
+  grid-template-columns: var(--editor-col) minmax(420px, 1fr) var(--inspector-col);
   min-height: 0;
+  transition: grid-template-columns 240ms ease;
+}
+
+.workspace.is-model-collapsed {
+  --editor-col: 56px;
+}
+
+.workspace.is-inspector-collapsed {
+  --inspector-col: 56px;
 }
 
 .editor-pane,
@@ -163,6 +174,67 @@ h2 {
   gap: 12px;
   padding: 12px 14px;
   border-bottom: 1px solid var(--line);
+}
+
+.pane-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.sidebar-toggle {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: var(--surface-strong);
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.editor-pane,
+.inspector-pane,
+.diagram-pane {
+  transition:
+    border-color 240ms ease,
+    box-shadow 240ms ease;
+}
+
+.editor-pane.is-collapsed,
+.inspector-pane.is-collapsed {
+  overflow: hidden;
+}
+
+.editor-pane.is-collapsed .pane-heading,
+.inspector-pane.is-collapsed .pane-heading {
+  justify-content: center;
+  padding: 12px 10px;
+}
+
+.editor-pane.is-collapsed .pane-title,
+.inspector-pane.is-collapsed .pane-title {
+  flex-direction: column;
+}
+
+.editor-pane.is-collapsed h2,
+.inspector-pane.is-collapsed h2 {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.editor-pane.is-collapsed #dslInput,
+.editor-pane.is-collapsed .editor-footer,
+.editor-pane.is-collapsed #modelStatus,
+.inspector-pane.is-collapsed .tabs,
+.inspector-pane.is-collapsed .tab-panel,
+.inspector-pane.is-collapsed #tableCount {
+  display: none;
 }
 
 .status-pill {
@@ -410,7 +482,15 @@ pre {
 
 @media (max-width: 1080px) {
   .workspace {
+    --editor-col: 1fr;
+    --inspector-col: 1fr;
     grid-template-columns: 1fr;
+  }
+
+  .workspace.is-model-collapsed,
+  .workspace.is-inspector-collapsed {
+    --editor-col: 1fr;
+    --inspector-col: 1fr;
   }
 
   .editor-pane,
@@ -420,6 +500,11 @@ pre {
     border-left: 0;
     border-right: 0;
     border-bottom: 1px solid var(--line);
+  }
+
+  .editor-pane.is-collapsed,
+  .inspector-pane.is-collapsed {
+    min-height: 58px;
   }
 }
 

@@ -2,6 +2,8 @@
   "use strict";
 
   const STORAGE_KEY = "nosql-diagram-tool:dsl";
+  const MODEL_SIDEBAR_KEY = "nosql-diagram-tool:model-collapsed";
+  const INSPECTOR_SIDEBAR_KEY = "nosql-diagram-tool:inspector-collapsed";
 
   const sampleDsl = `project "Commerce DynamoDB"
 
@@ -40,6 +42,9 @@ table Products {
 }`;
 
   const els = {
+    workspace: document.getElementById("workspace"),
+    editorPane: document.getElementById("editorPane"),
+    inspectorPane: document.getElementById("inspectorPane"),
     dslInput: document.getElementById("dslInput"),
     modelStatus: document.getElementById("modelStatus"),
     cursorInfo: document.getElementById("cursorInfo"),
@@ -60,6 +65,8 @@ table Products {
     zoomOutBtn: document.getElementById("zoomOutBtn"),
     zoomInBtn: document.getElementById("zoomInBtn"),
     zoomLabel: document.getElementById("zoomLabel"),
+    modelSidebarBtn: document.getElementById("modelSidebarBtn"),
+    inspectorSidebarBtn: document.getElementById("inspectorSidebarBtn"),
   };
 
   let zoom = 1;
@@ -448,6 +455,27 @@ table Products {
     els.zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
   }
 
+  function setSidebar(side, collapsed) {
+    const isModel = side === "model";
+    const pane = isModel ? els.editorPane : els.inspectorPane;
+    const button = isModel ? els.modelSidebarBtn : els.inspectorSidebarBtn;
+    const workspaceClass = isModel ? "is-model-collapsed" : "is-inspector-collapsed";
+    const storageKey = isModel ? MODEL_SIDEBAR_KEY : INSPECTOR_SIDEBAR_KEY;
+    const panelName = isModel ? "modelo" : "inspector";
+
+    pane.classList.toggle("is-collapsed", collapsed);
+    els.workspace.classList.toggle(workspaceClass, collapsed);
+    button.textContent = isModel ? (collapsed ? ">" : "<") : (collapsed ? "<" : ">");
+    button.title = `${collapsed ? "Maximizar" : "Minimizar"} ${panelName}`;
+    button.setAttribute("aria-label", button.title);
+    localStorage.setItem(storageKey, String(collapsed));
+  }
+
+  function restoreSidebars() {
+    setSidebar("model", localStorage.getItem(MODEL_SIDEBAR_KEY) === "true");
+    setSidebar("inspector", localStorage.getItem(INSPECTOR_SIDEBAR_KEY) === "true");
+  }
+
   function updateCursor() {
     const value = els.dslInput.value.slice(0, els.dslInput.selectionStart);
     const lines = value.split(/\r?\n/);
@@ -480,6 +508,12 @@ table Products {
     els.zoomOutBtn.addEventListener("click", () => setZoom(zoom - 0.1));
     els.zoomInBtn.addEventListener("click", () => setZoom(zoom + 0.1));
     els.fitBtn.addEventListener("click", () => setZoom(1));
+    els.modelSidebarBtn.addEventListener("click", () => {
+      setSidebar("model", !els.editorPane.classList.contains("is-collapsed"));
+    });
+    els.inspectorSidebarBtn.addEventListener("click", () => {
+      setSidebar("inspector", !els.inspectorPane.classList.contains("is-collapsed"));
+    });
 
     document.querySelectorAll(".tab").forEach((tab) => {
       tab.addEventListener("click", () => {
@@ -495,6 +529,7 @@ table Products {
     els.dslInput.value = localStorage.getItem(STORAGE_KEY) || sampleDsl;
     bindEvents();
     setZoom(1);
+    restoreSidebars();
     updateCursor();
     render(parseDsl(els.dslInput.value));
   }

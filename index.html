@@ -24,10 +24,13 @@
         </div>
       </header>
 
-      <main class="workspace">
-        <section class="editor-pane" aria-label="Editor de modelagem">
+      <main id="workspace" class="workspace">
+        <section id="editorPane" class="editor-pane" aria-label="Editor de modelagem">
           <div class="pane-heading">
-            <h2>Modelo</h2>
+            <div class="pane-title">
+              <button id="modelSidebarBtn" class="sidebar-toggle" type="button" title="Minimizar modelo" aria-label="Minimizar modelo">&lt;</button>
+              <h2>Modelo</h2>
+            </div>
             <span id="modelStatus" class="status-pill">Pronto</span>
           </div>
           <textarea id="dslInput" spellcheck="false" aria-label="DSL de modelagem DynamoDB"></textarea>
@@ -55,9 +58,12 @@
           </div>
         </section>
 
-        <aside class="inspector-pane" aria-label="Resumo e exportações">
+        <aside id="inspectorPane" class="inspector-pane" aria-label="Resumo e exportações">
           <div class="pane-heading">
-            <h2>Inspector</h2>
+            <div class="pane-title">
+              <h2>Inspector</h2>
+              <button id="inspectorSidebarBtn" class="sidebar-toggle" type="button" title="Minimizar inspector" aria-label="Minimizar inspector">&gt;</button>
+            </div>
             <span id="tableCount" class="status-pill">0 tabelas</span>
           </div>
 
