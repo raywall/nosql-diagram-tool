@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NoSQL Diagram Tool</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <div>
+            <h1>NoSQL Diagram Tool</h1>
+            <p>Modelagem visual para tabelas DynamoDB via DSL</p>
+          </div>
+        </div>
+        <div class="toolbar" aria-label="Ações">
+          <button id="formatBtn" type="button" title="Formatar DSL">Formatar</button>
+          <button id="sampleBtn" type="button" title="Carregar exemplo">Exemplo</button>
+          <button id="copyBtn" type="button" title="Copiar DSL">Copiar</button>
+          <button id="downloadBtn" type="button" title="Baixar projeto">Baixar</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="editor-pane" aria-label="Editor de modelagem">
+          <div class="pane-heading">
+            <h2>Modelo</h2>
+            <span id="modelStatus" class="status-pill">Pronto</span>
+          </div>
+          <textarea id="dslInput" spellcheck="false" aria-label="DSL de modelagem DynamoDB"></textarea>
+          <div class="editor-footer">
+            <span id="cursorInfo">Linha 1, Coluna 1</span>
+            <span>Salvo localmente</span>
+          </div>
+        </section>
+
+        <section class="diagram-pane" aria-label="Diagrama">
+          <div class="canvas-header">
+            <div>
+              <h2 id="diagramTitle">Diagrama</h2>
+              <p id="diagramSubtitle">Tabelas, índices e padrões de acesso</p>
+            </div>
+            <div class="view-controls" role="group" aria-label="Modo de visualização">
+              <button id="fitBtn" type="button" title="Ajustar zoom">Ajustar</button>
+              <button id="zoomOutBtn" type="button" title="Diminuir zoom">-</button>
+              <span id="zoomLabel">100%</span>
+              <button id="zoomInBtn" type="button" title="Aumentar zoom">+</button>
+            </div>
+          </div>
+          <div id="diagramCanvas" class="diagram-canvas">
+            <div id="diagramBoard" class="diagram-board"></div>
+          </div>
+        </section>
+
+        <aside class="inspector-pane" aria-label="Resumo e exportações">
+          <div class="pane-heading">
+            <h2>Inspector</h2>
+            <span id="tableCount" class="status-pill">0 tabelas</span>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Abas do inspetor">
+            <button class="tab is-active" data-tab="summary" type="button">Resumo</button>
+            <button class="tab" data-tab="json" type="button">JSON</button>
+            <button class="tab" data-tab="cloudformation" type="button">CFN</button>
+          </div>
+
+          <div id="summaryTab" class="tab-panel is-active">
+            <div id="summaryList" class="summary-list"></div>
+            <div id="errorsPanel" class="errors-panel" hidden></div>
+          </div>
+
+          <div id="jsonTab" class="tab-panel">
+            <pre id="jsonOutput"></pre>
+          </div>
+
+          <div id="cloudformationTab" class="tab-panel">
+            <pre id="cfnOutput"></pre>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
