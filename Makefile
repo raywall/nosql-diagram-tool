@@ -1,6 +1,6 @@
 .PHONY: start stop
 
-PORT ?= 5177
+PORT ?= 4200
 
 # Inicia a ferramenta de modelagem NoSQL/DynamoDB
 start:
